@@ -1,7 +1,5 @@
 bar.txt
 foo.txt
 README.md
-
 testing some PR
-
 new data in it
