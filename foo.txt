@@ -3,3 +3,4 @@ README.md
 New data
 test some ascii
 Last try
+non ascii final
