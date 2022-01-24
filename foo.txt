@@ -2,3 +2,4 @@ foo.txt
 README.md
 New data
 test some ascii
+Last try
