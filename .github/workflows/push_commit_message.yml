@@ -1,10 +1,10 @@
 # .github/workflows/logger.yaml
-name: Source code compliance check
+name: Code Commit PreProcessing
 on: push
 
 jobs:
   log-github-event-goodies:
-    name: "Infoblox Source Code Commit Compliance"
+    name: "Code Commit Compliance Check"
     runs-on: ubuntu-latest
     steps:
       - name: Checking
