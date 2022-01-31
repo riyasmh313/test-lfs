@@ -9,9 +9,6 @@ jobs:
     steps:
       - name: Checking
         uses: actions/checkout@v2
-        env:
-          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
-          V1_TOKEN: ${{ secrets.V1_TOKEN }}
       - name: Set up python
         uses: actions/setup-python@v2
         with:
@@ -20,5 +17,8 @@ jobs:
         run: |
           pip install requests
       - name: Check Commit Title JIRA & VersionOne
+        env:
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          V1_TOKEN: ${{ secrets.V1_TOKEN }}
         run: |
           python .github/scm_scripts/ib_check.py "${{ github.event.head_commit.message }}" "${{ env.JIRA_TOKEN }}" "${{ env.V1_TOKEN }}"
