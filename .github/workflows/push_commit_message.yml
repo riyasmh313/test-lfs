@@ -8,11 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checking
-        shell: bash
+        uses: actions/checkout@v2
         env:
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
           V1_TOKEN: ${{ secrets.V1_TOKEN }}
-        uses: actions/checkout@v2
       - name: Set up python
         uses: actions/setup-python@v2
         with:
