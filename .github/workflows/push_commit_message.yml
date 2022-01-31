@@ -16,6 +16,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
            python-version: '3.8.10'
-      - run: |
+      - name: Install python dependencies
+        run: |
           pip install requests
+      - name: Check Commit Title JIRA & VersionOne
+        run: |
           python .github/scm_scripts/ib_check.py "${{ github.event.head_commit.message }}" "${{ env.JIRA_TOKEN }}" "${{ env.V1_TOKEN }}"
