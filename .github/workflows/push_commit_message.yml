@@ -29,6 +29,8 @@ jobs:
         env:
           JIRA_USER_EMAIL: rhaneefa@infoblox.com
           JIRA_API_TOKEN: SXytw1cH4d7FDMHaKoQO904E
+      - name: Echo JIRA ID
+        run: echo " JIRA ID IS ${{ env.JIRA_ID }} "
       - name: JIRA Comment
         uses: atlassian/gajira-comment@master
         with:
