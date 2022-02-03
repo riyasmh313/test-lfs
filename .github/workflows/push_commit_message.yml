@@ -7,6 +7,9 @@ jobs:
     name: "Code Commit Compliance Check"
     runs-on: ubuntu-latest
     steps:
+      - name: Env Variables
+        run : |
+          echo "${{toJSON(github.event)}}"
       - name: Checking
         uses: actions/checkout@v2
       - name: Set up python
