@@ -3,7 +3,7 @@ name: Code Commit PreProcessing
 on: push
 
 jobs:
-  log-github-event-goodies:
+  github-preprocessing:
     name: "Code Commit Compliance Check"
     runs-on: ubuntu-latest
     steps:
