@@ -25,18 +25,3 @@ jobs:
           V1_TOKEN: ${{ secrets.V1_TOKEN }}
         run: |
           python .github/scm_scripts/ib_check.py "${{ github.event.head_commit.message }}" "${{ env.JIRA_TOKEN }}" "${{ env.V1_TOKEN }}"
-          export JIRA_ID=$(echo "${{ github.event.head_commit_message }}" | awk -F':' '{print $1}')
-          echo "JIRA_ID=$JIRA_ID" >> $GITHUB_ENV
-      - name: JIRA Login
-        uses: atlassian/gajira-login@master
-        env:
-          JIRA_USER_EMAIL: rhaneefa@infoblox.com
-          JIRA_API_TOKEN: ${{ secrets.MY_API_TOKEN }}
-      - name: Echo JIRA ID
-        run: echo " JIRA ID IS ${{ env.JIRA_ID }} "
-      - name: JIRA Comment
-        uses: atlassian/gajira-comment@master
-        with:
-          issue: ${{ env.JIRA_ID }}
-          comment:  ${{ github.event.pusher.name }} pushed to repository ${{ github.event.repository.full_name }}
-        
