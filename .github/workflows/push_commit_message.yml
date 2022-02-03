@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Env variables
         run: |
-          echo "${{toJSON(github.event)}}"
+          echo "${{toJSON(github)}}"
       - name: Checking
         uses: actions/checkout@v2
       - name: Set up python
