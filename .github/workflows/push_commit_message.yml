@@ -7,8 +7,8 @@ jobs:
     name: "Code Commit Compliance Check"
     runs-on: ubuntu-latest
     steps:
-      - name: Env Variables
-        run : |
+      - name: Env variables
+        run: |
           echo "${{toJSON(github.event)}}"
       - name: Checking
         uses: actions/checkout@v2
@@ -25,6 +25,7 @@ jobs:
           V1_TOKEN: ${{ secrets.V1_TOKEN }}
         run: |
           python .github/scm_scripts/ib_check.py "${{ github.event.head_commit.message }}" "${{ env.JIRA_TOKEN }}" "${{ env.V1_TOKEN }}"
+
 #          export JIRA_ID=$(echo "${{ github.event.head_commit_message }}" | awk -F':' '{print $1}')
 #          echo "JIRA_ID=$JIRA_ID" >> $GITHUB_ENV
 #      - name: JIRA Login
@@ -40,4 +41,4 @@ jobs:
 #        with:
 #          issue: ${{ env.JIRA_ID }}
 #          comment:  ${{ github.event.pusher.name }} pushed to repository ${{ github.event.repository.full_name }}
-        
+
