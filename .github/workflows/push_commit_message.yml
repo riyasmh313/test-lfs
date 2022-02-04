@@ -9,7 +9,13 @@ jobs:
     steps:
       - name: Env variables
         run: |
+          echo "$GITHUB_REF"
+          echo "${{ toJSON(github.ref)}}"
+          echo "${{ toJSON(github.ref_name)}}"
+          echo "${{ toJSON(github.repositoryUrl)}}"
           echo "${{toJSON(github)}}"
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
       - name: Checking
         uses: actions/checkout@v2
       - name: Set up python
