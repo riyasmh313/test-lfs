@@ -9,11 +9,11 @@ jobs:
     steps:
       - name: Env variables
         run: |
-          echo "${{ github.event.number }}"
+          echo "${{ toJSON(github.event.number) }}"
           echo "${{ toJSON(github.ref)}}"
           echo "${{ toJSON(github.ref_name)}}"
           echo "${{ toJSON(github.repositoryUrl)}}"
-          echo "${{toJSON(github)}}"
+          echo "${{toJSON(github.event)}}"
       - name: Dump steps context
         run: echo '${{ toJSON(steps) }}'
       - name: Checking
