@@ -34,4 +34,4 @@ jobs:
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
           V1_TOKEN: ${{ secrets.V1_TOKEN }}
         run: |
-          python .github/scm_scripts/ib_check.py "${{ github.event.head_commit.message }}" "${{ env.JIRA_TOKEN }}" "${{ env.V1_TOKEN }}"
+          python .github/scm_scripts/ib_check.py "${{ github.event.head_commit.message }}" "${{ env.JIRA_TOKEN }}" "${{ env.V1_TOKEN }}" "${{ github.event.head_commit.author.email }}" "${{ github.ref_name }}" "${{ github.repositoryUrl }}"

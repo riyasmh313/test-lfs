@@ -29,6 +29,24 @@ def jira(ticket_id, auth_token):
 
     return False
 
+def jira_comment(ticket_id, auth_token, email, branch, repo):
+
+    headers = {
+        "Authorization": "Basic "+auth_token,
+        "Accept": "application/json"
+    }
+
+    try:
+        url = JIRA_URL+ticket_id+"/comment"
+        data = "{'body': 'user: "+email+' pushed the '+branch+' to repo:'+repo+"'}"
+        response = requests.post(url, headers=headers, data=data)
+        if response.status_code == 200:
+            print("Posted comment onto JIRA")
+        else:
+            print("Failed to post comment: ", response.text)
+    except Exception as e:
+        print("JIRA Exception occurred ", str(e))
+
 def versionone(task_id, story_id, token):
 
     headers = {
@@ -67,13 +85,16 @@ def versionone(task_id, story_id, token):
     return False
 
 if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        print("Usage: ib_check <Commit Title> <JIRA TOKEN> <V1 Token>")
+    if len(sys.argv) < 7:
+        print("Usage: ib_check <Commit Title> <JIRA TOKEN> <V1 Token> <email> <branch> <repo>")
         sys.exit(1)
 
     title = sys.argv[1]
     jira_token = sys.argv[2]
     v1_token = sys.argv[3]
+    email = sys.argv[4]
+    branch = sys.argv[5]
+    repo = sys.argv[6]
 
     #Check for non-ascii in The Title
     if not title.isascii():
@@ -112,6 +133,8 @@ if __name__ == '__main__':
         ret = versionone(None, head, v1_token)
     else:
         ret = jira(head, jira_token)
+        if ret:
+            jira_comment(head, jira_token, email, branch, repo)
 
     if ret:
         sys.exit(0)
