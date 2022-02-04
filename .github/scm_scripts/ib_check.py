@@ -4,7 +4,8 @@ import sys
 import requests
 import json
 
-JIRA_URL = 'https://infoblox.atlassian.net/rest/api/3/issue/'
+JIRA_URL_RO = 'https://infoblox.atlassian.net/rest/api/3/issue/'
+JIRA_URL_RW = 'https://infoblox.atlassian.net/rest/api/2/issue/'
 V1_URL = 'https://www10.v1host.com/InfobloxNewV1/query.v1'
 
 def jira(ticket_id, auth_token):
@@ -15,7 +16,7 @@ def jira(ticket_id, auth_token):
     }
 
     try:
-        url = JIRA_URL+ticket_id
+        url = JIRA_URL_RO+ticket_id
         response = requests.request("GET", url, headers=headers)
         if response.status_code == 200:
             print("JIRA Response: ", response.json().get('key'))
@@ -38,7 +39,7 @@ def jira_comment(ticket_id, auth_token, email, branch, repo):
     }
 
     try:
-        url = JIRA_URL+ticket_id+"/comment"
+        url = JIRA_URL_RW+ticket_id+"/comment"
         #data = "{'body': 'user: "+email+' pushed the '+branch+' to repo:'+repo+"'}"
         data = "{'body': 'user: Testing inserting a comment into JIRA'}"
         response = requests.post(url, headers=headers, data=data)
