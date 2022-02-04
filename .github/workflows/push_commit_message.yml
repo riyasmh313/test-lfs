@@ -19,6 +19,9 @@ jobs:
       - name: Install python dependencies
         run: |
           pip install requests
+      - uses: kceb/pull-request-url-action@v1
+        id: pr-url
+      - run: echo "${{ steps.pr-url.outputs.url }}"
       - name: Check Commit Title JIRA & VersionOne
         env:
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
