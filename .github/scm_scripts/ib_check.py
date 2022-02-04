@@ -33,6 +33,7 @@ def jira_comment(ticket_id, auth_token, email, branch, repo):
 
     headers = {
         "Authorization": "Basic "+auth_token,
+        "Content-Type": "application/jsonr",
         "Accept": "application/json"
     }
 
