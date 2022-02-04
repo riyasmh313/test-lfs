@@ -39,7 +39,8 @@ def jira_comment(ticket_id, auth_token, email, branch, repo):
 
     try:
         url = JIRA_URL+ticket_id+"/comment"
-        data = "{'body': 'user: "+email+' pushed the '+branch+' to repo:'+repo+"'}"
+        #data = "{'body': 'user: "+email+' pushed the '+branch+' to repo:'+repo+"'}"
+        data = "{'body': 'user: Testing inserting a comment into JIRA'}"
         response = requests.post(url, headers=headers, data=data)
         if response.status_code == 200:
             print("Posted comment onto JIRA")
