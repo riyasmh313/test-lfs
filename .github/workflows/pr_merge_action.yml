@@ -12,3 +12,16 @@ jobs:
     - name: Echo statement
       run: |
         echo "Lets see if it prints"
+    - name: JIRA Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_USER_EMAIL: jira.bot@infoblox.com
+        JIRA_API_TOKEN: ${{ secrets.JIRA_TOKEN }}
+    - name: Change Status
+      uses: tuanddd/jira-automate-transition@v1.0.5
+      with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         column-to-move-to-when-review-requested: In Review
+         column-to-move-to-when-changes-requested: In Progress
+         column-to-move-to-when-merged: Resolved
+         jira-issue-id: NIOS-83411
