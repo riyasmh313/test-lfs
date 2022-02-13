@@ -1,6 +1,6 @@
 # .github/workflows/logger.yaml
 name: Code Commit PreProcessing
-on: [push, pull_request]
+on: [push]
 
 jobs:
   github-preprocessing:
