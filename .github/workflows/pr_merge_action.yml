@@ -15,6 +15,7 @@ jobs:
     - name: JIRA Login
       uses: atlassian/gajira-login@master
       env:
+        JIRA_BASE_URL: https://infoblox.atlassian.net
         JIRA_USER_EMAIL: jira.bot@infoblox.com
         JIRA_API_TOKEN: ${{ secrets.JIRA_TOKEN }}
     - name: Change Status
