@@ -1,22 +1,16 @@
 # .github/workflows/logger.yaml
 name: Code Commit PreProcessing
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - main
 
 jobs:
   github-preprocessing:
     name: "Code Commit Compliance Check"
     runs-on: ubuntu-latest
     steps:
-      - name: Env variables
-        run: |
-          echo "${{ toJSON(github.event.number) }}"
-          echo "${{ toJSON(github.ref)}}"
-          echo "${{ toJSON(github.ref_name)}}"
-          echo "${{ toJSON(github.repositoryUrl)}}"
-          echo "${{toJSON(github.event)}}"
-      - name: Dump steps context
-        run: echo '${{ toJSON(steps) }}'
-      - name: Checking
+      - name: Check out code
         uses: actions/checkout@v2
       - name: Set up python
         uses: actions/setup-python@v2
@@ -25,13 +19,21 @@ jobs:
       - name: Install python dependencies
         run: |
           pip install requests
-      - uses: kceb/pull-request-url-action@v1
-        id: pr-url
-      - name: Get PR Link
-        run: echo "${{ steps.pr-url.outputs.url }}"
-      - name: Check Commit Title JIRA & VersionOne
+      - name: Commit Title Check
         env:
+          TICKET_ID: DUMMY_FIELD
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
           V1_TOKEN: ${{ secrets.V1_TOKEN }}
         run: |
-          python .github/scm_scripts/ib_check.py "${{ github.event.head_commit.message }}" "${{ env.JIRA_TOKEN }}" "${{ env.V1_TOKEN }}" "${{ github.event.head_commit.author.email }}" "${{ github.ref_name }}" "${{ github.repositoryUrl }}"
+          export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
+          echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
+      - name: Version1 Check
+        if: success() && startsWith( ${{ env.TICKET_ID }}, 'TK') || startsWith( ${{ env.TICKET_ID }}, 'B')
+        run: |
+          echo "V1 TICKE ID = ${{ env.TICKET_ID }}"
+          python .github/scm_scripts/version_one_check.py "${{ env.TICKET_ID }}" "${{ env.V1_TOKEN }}"
+      - name: JIRA Check
+        if: success() && !startsWith( ${{ env.TICKET_ID }}, 'TK') && !startsWith( ${{ env.TICKET_ID }}, 'B')
+        run: |
+          echo "JIRA TICKE ID = ${{ env.TICKET_ID }}"
+          python .github/scm_scripts/jira_check.py "${{ env.TICKET_ID }}" "${{ env.JIRA_TOKEN }}"

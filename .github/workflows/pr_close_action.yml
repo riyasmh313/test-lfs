@@ -1,0 +1,24 @@
+name: PR Merge Actions
+on:
+   pull_request:
+       types: [closed]
+       branches:
+           - main
+jobs:
+  post-processing-flow:
+    name: "Processing a PR Merge"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Set up python
+      uses: actions/setup-python@v2
+      with:
+         python-version: '3.8.10'
+    - name: Install python dependencies
+      run: |
+        pip install requests
+    - name: JIRA Ticket
+      run: |
+         echo '${{ github.event.head_commit.message }}'
+
