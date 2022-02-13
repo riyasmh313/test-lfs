@@ -10,10 +10,7 @@ jobs:
     name: "Code Commit Compliance Check"
     runs-on: ubuntu-latest
     steps:
-      - name: Env variables
-        run: |
-          echo "${{toJSON(github)}}"
-      - name: Checking
+      - name: Check out code
         uses: actions/checkout@v2
       - name: Set up python
         uses: actions/setup-python@v2
@@ -22,13 +19,23 @@ jobs:
       - name: Install python dependencies
         run: |
           pip install requests
-      - uses: kceb/pull-request-url-action@v1
-        id: pr-url
-      - name: Get PR Link
-        run: echo "${{ steps.pr-url.outputs.url }}"
-      - name: Check Commit Title JIRA & VersionOne
+      - name: Commit Title Check
+        env:
+          TICKET_ID: Dummy_field
+        run: |
+          export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
+          echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
+      - name: Version1 Check
+        env:
+          V1_TOKEN: ${{ secrets.V1_TOKEN }}
+        if: success() && (startsWith( env.TICKET_ID, 'TK-') || startsWith(env.TICKET_ID, 'B-'))
+        run: |
+          echo "V1 TICKE ID = ${{ env.TICKET_ID }}"
+          python .github/scm_scripts/version_one_check.py "${{ env.TICKET_ID }}" "${{ env.V1_TOKEN }}"
+      - name: JIRA Check
         env:
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
-          V1_TOKEN: ${{ secrets.V1_TOKEN }}
+        if: success() && (!startsWith(env.TICKET_ID, 'TK-') && !startsWith(env.TICKET_ID, 'B-'))
         run: |
-          python .github/scm_scripts/ib_check.py "${{ github.event.head_commit.message }}" "${{ env.JIRA_TOKEN }}" "${{ env.V1_TOKEN }}"
+          echo "JIRA TICKE ID = ${{ env.TICKET_ID }}"
+          python .github/scm_scripts/jira_check.py "${{ env.TICKET_ID }}" "${{ env.JIRA_TOKEN }}"
