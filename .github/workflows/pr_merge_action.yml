@@ -1,13 +1,14 @@
 name: Post Merge Actions
 on:
    pull_request:
-   types: [opened, closed]
-   
+       types: [opened, closed]
+       branches:
+           - main
 jobs:
-    post_processing:
-       name: "Sample post processing"
-       runs-on: ubuntu-latest
-       steps:
-           -name: Simple Echo
-            run: |
-               echo "Just trying to print this line"
+  post-processing-flow:
+    name: "Sample post processing"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Echo statement
+      run: |
+        echo "Lets see if it prints"
