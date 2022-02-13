@@ -28,12 +28,12 @@ jobs:
           export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
           echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
       - name: Version1 Check
-        if: success() && startsWith( ${{ env.TICKET_ID }}, 'TK') || startsWith( ${{ env.TICKET_ID }}, 'B')
+        if: success() && (startsWith( env.TICKET_ID , 'TK-') || startsWith( env.TICKET_ID , 'B-'))
         run: |
-          echo "V1 TICKE ID = ${{ env.TICKET_ID }}"
+          echo "V1 TICKET ID = ${{ env.TICKET_ID }}"
           python .github/scm_scripts/version_one_check.py "${{ env.TICKET_ID }}" "${{ env.V1_TOKEN }}"
       - name: JIRA Check
-        if: success() && !startsWith( ${{ env.TICKET_ID }}, 'TK') && !startsWith( ${{ env.TICKET_ID }}, 'B')
+        if: success() && (!startsWith( env.TICKET_ID , 'TK-') && !startsWith(  env.TICKET_ID , 'B-'))
         run: |
-          echo "JIRA TICKE ID = ${{ env.TICKET_ID }}"
+          echo "JIRA TICKET ID = ${{ env.TICKET_ID }}"
           python .github/scm_scripts/jira_check.py "${{ env.TICKET_ID }}" "${{ env.JIRA_TOKEN }}"
