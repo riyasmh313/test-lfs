@@ -22,17 +22,19 @@ jobs:
       - name: Commit Title Check
         env:
           TICKET_ID: DUMMY_FIELD
-          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
-          V1_TOKEN: ${{ secrets.V1_TOKEN }}
         run: |
           export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
           echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
       - name: Version1 Check
+        env:
+          V1_TOKEN: ${{ secrets.V1_TOKEN }}
         if: success() && (startsWith( env.TICKET_ID , 'TK-') || startsWith( env.TICKET_ID , 'B-'))
         run: |
           echo "V1 TICKET ID = ${{ env.TICKET_ID }}"
           python .github/scm_scripts/version_one_check.py "${{ env.TICKET_ID }}" "${{ env.V1_TOKEN }}"
       - name: JIRA Check
+        env:
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
         if: success() && (!startsWith( env.TICKET_ID , 'TK-') && !startsWith(  env.TICKET_ID , 'B-'))
         run: |
           echo "JIRA TICKET ID = ${{ env.TICKET_ID }}"
