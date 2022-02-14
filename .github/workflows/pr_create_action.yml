@@ -23,8 +23,10 @@ jobs:
         TICKET_ID: Dummy_field
       run: |
         echo "Name ${{ github.event.pusher.name }}"
+        echo "Login ${{ github.event.pull_request.user.login }}"
+        echo "Issue name ${{ github.event.issue.user.login }}"
         echo "Repo ${{ github.event.repository.full_name }}"
-        echo "PR link ${{ github.event.pull_request.html.href }}"
+        echo "PR link ${{ github.event.pull_request._links.html.href }}"
         echo "Branch ${{ github.event.pull_request.head.ref }}"
         echo "${{ toJSON( github.event) }}"
         export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
