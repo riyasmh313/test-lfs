@@ -28,3 +28,18 @@ jobs:
         echo "${{ toJSON( github.event) }}"
         export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
         echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
+    - name: Commit Title Check
+      env:
+        TICKET_ID: Dummy_field
+      run: |
+        export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
+        echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
+    - name: JIRA Fix Version and Comment
+      env:
+        JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+      if: success() && (!startsWith(env.TICKET_ID, 'TK-') && !startsWith(env.TICKET_ID, 'B-'))
+      run: |
+        echo "JIRA TICKE ID = ${{ env.TICKET_ID }}"
+        python .github/scm_scripts/jira_fix_version.py "${{ env.TICKET_ID }}" "${{ env.JIRA_TOKEN }}" "${{ github.event.pull_request.base.ref }}"
+        python .github/scm_scripts/jira_comment.py "${{ env.TICKET_ID }}" "${{ env.JIRA_TOKEN }}" "${{ github.event.pull_request.user.login }}" "creating PR" "${{ github.event.pull_request.base.ref }}" "${{ github.event.repository.full_name }}" "${{ github.event.pull_request.html_url }}"
+
