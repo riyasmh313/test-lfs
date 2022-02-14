@@ -21,7 +21,8 @@ def jira(ticket_id, auth_token, branch):
             blist = branch.split('/')
             if len(blist) == 1:
                 print("Version information not available from base branch in github")
-                return False
+                # TODO: Change this to False
+                return True
             gitVersion = blist[1]
             present = [st for st in fixVersions if gitVersion in st]
             if len(present) == 0:
