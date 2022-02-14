@@ -22,6 +22,6 @@ jobs:
       env:
         TICKET_ID: Dummy_field
       run: |
-        echo toJSON( ${{ github.event }})
+        echo "${{ toJSON( github.event) }}"
         export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
         echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
