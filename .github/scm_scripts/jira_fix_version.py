@@ -18,7 +18,11 @@ def jira(ticket_id, auth_token, branch):
         if response.status_code == 200:
             jd = response.json()
             fixVersions = [d['name'] for d in jd['fields']['fixVersions']]
-            gitVersion = branch.split('/')[1]
+            blist = branch.split('/')
+            if len(blist) == 1:
+                print("Version information not available from base branch in github")
+                return False
+            gitVersion = blist[1]
             present = [st for st in fixVersions if gitVersion in st]
             if len(present) == 0:
                 print("JIRA Fix Version :", fixVersions, " does not match with github branch version :", branch)
