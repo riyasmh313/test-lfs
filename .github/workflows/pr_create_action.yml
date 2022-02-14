@@ -2,8 +2,7 @@ name: PR Create Actions
 on:
    pull_request:
        types: [opened]
-       branches:
-           - main
+       branches: [main, develop/9.0, develop/8.0, release/9.0.1]
 jobs:
   post-processing-flow:
     name: "PR create processing"
