@@ -23,7 +23,7 @@ jobs:
       run: |
         echo "Login ${{ github.event.pull_request.user.login }}"
         echo "Repo ${{ github.event.repository.full_name }}"
-        echo "PR link ${{ github.event.pull_request._links.html.href }}"
+        echo "PR link ${{ github.event.pull_request.html_url }}"
         echo "Branch ${{ github.event.pull_request.base.ref }}"
         echo "${{ toJSON( github.event) }}"
         export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
