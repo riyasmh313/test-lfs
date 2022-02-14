@@ -17,22 +17,18 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install requests
-    - name: Commit Title Check
-      env:
-        TICKET_ID: Dummy_field
+    - name: Echo Statements
       run: |
         echo "Login ${{ github.event.pull_request.user.login }}"
         echo "Repo ${{ github.event.repository.full_name }}"
         echo "PR link ${{ github.event.pull_request.html_url }}"
         echo "Branch ${{ github.event.pull_request.base.ref }}"
         echo "${{ toJSON( github.event) }}"
-        export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
-        echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
     - name: Commit Title Check
       env:
         TICKET_ID: Dummy_field
       run: |
-        export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
+        export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.pull_request.title }}')
         echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
     - name: JIRA Fix Version and Comment
       env:
