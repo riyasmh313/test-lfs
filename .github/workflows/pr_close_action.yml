@@ -1,4 +1,4 @@
-name: PR close Actions
+name: PR Close Actions
 on:
    pull_request:
        types: [closed]
