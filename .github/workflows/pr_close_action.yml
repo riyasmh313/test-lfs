@@ -2,11 +2,10 @@ name: PR Close Actions
 on:
    pull_request:
        types: [closed]
-       branches:
-           - main
+       branches: [main, riyash/9.0, riyash/8.0, release/9.0.1]
 jobs:
   post-processing-flow:
-    name: "PR closed processing"
+    name: "PR merge processing"
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
@@ -18,9 +17,17 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install requests
-    - name: Commit Title Check
+    - name: Fetch Commit Title 
       env:
         TICKET_ID: Dummy_field
       run: |
-        export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.head_commit.message }}')
+        export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.pull_request.title }}')
         echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
+    - name: JIRA Fix Version and Comment
+      env:
+        JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+      if: success() && (!startsWith(env.TICKET_ID, 'TK-') && !startsWith(env.TICKET_ID, 'B-'))
+      run: |
+        echo "JIRA TICKE ID = ${{ env.TICKET_ID }}"
+        python .github/scm_scripts/jira_comment.py "${{ env.TICKET_ID }}" "${{ env.JIRA_TOKEN }}" "${{ github.event.pull_request.user.login }}" "merging PR" "${{ github.event.pull_request.base.ref }}" "${{ github.event.repository.full_name }}" "${{ github.event.pull_request.html_url }}"
+
