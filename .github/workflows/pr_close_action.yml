@@ -23,7 +23,7 @@ jobs:
       run: |
         export TICKET_ID=$(python .github/scm_scripts/title_check.py '${{ github.event.pull_request.title }}')
         echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
-    - name: JIRA Fix Version and Comment
+    - name: JIRA Comment
       env:
         JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
       if: success() && (!startsWith(env.TICKET_ID, 'TK-') && !startsWith(env.TICKET_ID, 'B-'))
