@@ -1,4 +1,4 @@
-adfadsfafdasdadfadsafsdfsadfadfasdfadsfasdfsdf
+adsfasdfadfadsfafdasdadfadsafsdfsadfadfasdfadsfasdfsdf
 foo.txt
 README.md
 New data
