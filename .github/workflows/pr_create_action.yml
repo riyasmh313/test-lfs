@@ -17,6 +17,8 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install requests
+    - name: Github Data
+      run: echo "${{toJSON(github)}}"
     - name: Fetch Commit Title 
       env:
         TICKET_ID: Dummy_field
