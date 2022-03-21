@@ -17,8 +17,10 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install requests
-    - name: Github Data
-      run: echo "${{toJSON(github)}}"
+    - name: Github Description 1
+      run: echo "${{toJSON(github.event.pull_request.body)}}"
+    - name: Github Description 2
+      run: echo "${{toJSON(github.event.pull_request.event.pull_request.event.pull_request.body)}}"
     - name: Fetch Commit Title 
       env:
         TICKET_ID: Dummy_field
