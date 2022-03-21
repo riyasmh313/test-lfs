@@ -1,7 +1,7 @@
 name: PR Create Actions
 on:
    pull_request:
-       types: [opened]
+       types: [opened, reopened, edited]
        branches: ['main', 'riyash/**', 'release/**']
 jobs:
   post-processing-flow:
@@ -17,10 +17,8 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install requests
-    - name: Github Description 1
-      run: echo "${{toJSON(github.event.pull_request.body)}}"
-    - name: Github Description 2
-      run: echo "${{toJSON(github.event.pull_request.event.pull_request.event.pull_request.body)}}"
+    - name: PR Description check
+      run: python .github/scm_scripts/pr_desc_check.py "${{ github.event.pull_request.body }}"
     - name: Fetch Commit Title 
       env:
         TICKET_ID: Dummy_field

@@ -17,6 +17,8 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install requests
+    - name: PR Description check
+      run: python .github/scm_scripts/pr_desc_check.py "${{ github.event.pull_request.body }}"
     - name: Fetch Commit Title 
       env:
         TICKET_ID: Dummy_field
