@@ -2,7 +2,7 @@ name: PR Create Actions
 on:
    pull_request:
        types: [opened]
-       branches: [main, riyash/9.0, riyash/8.0, release/9.0.1]
+       branches: ['main', 'riyash/**', 'release/**']
 jobs:
   post-processing-flow:
     name: "PR create processing"
